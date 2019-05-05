@@ -1,6 +1,8 @@
+
+
 <?php
 
-require 'vendor/autoload.php';
+require 'vendor\autoload.php';
 
 $configuration = [
     'settings' => [
@@ -23,7 +25,7 @@ $container['pdo'] = function ($c) {
 
 //$app = new Slim\App();
 
-$routeFiles = (array) glob('routes/*.php');
+$routeFiles = (array) glob('routes\*.php');
 foreach($routeFiles as $routeFile) {
     require_once $routeFile;
 }
@@ -32,11 +34,21 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
+
+$app->get('/', function ($request, $response, $args) {
+    $file = 'index.html';
+    if (file_exists($file)) {
+        return $response->write(file_get_contents($file));
+    } else {
+        throw new \Slim\Exception\NotFoundException($request, $response);
+    }
+});
+
 // CORS
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
     return $response
-        ->withHeader('Access-Control-Allow-Origin', '*') //CORS http://127.0.0.1:5500
+        ->withHeader('Access-Control-Allow-Origin', '*')
         ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });

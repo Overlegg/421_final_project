@@ -2,7 +2,7 @@ new Vue({
     el: '#app',
     data() {
         return {
-            uname: '',
+            email: '',
             password: '',
             status: false,
             msg: ''
@@ -14,10 +14,10 @@ new Vue({
     methods: {
         login () {            
             axios
-                .post('http://localhost:5500/api/login', {uname: this.uname, password: this.password})
+                .post('http://localhost:8080/api/login', {email: this.email, password: this.password})
                 .then(response => (
                     this.status = response.data.status,
-                    (this.status == true) ? window.location = "AddStat.html" : this.msg = 'Login failed!'                                     
+                    (this.status == true) ? window.location = "AddStat.html" : this.msg = this.password                                     
                     )                    
                 )             
                 .catch(function (error) {
